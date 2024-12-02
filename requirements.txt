@@ -1,0 +1,26 @@
+# Core dependencies
+fastapi
+uvicorn[standard]
+gunicorn
+python-multipart
+
+# Azure packages
+azure-functions
+azure-cosmos
+azure-ai-formrecognizer
+azure-core
+azure-identity
+azure-functions-durable
+
+# OpenAI and environment
+openai
+python-dotenv
+
+# HTTP and async
+aiohttp
+requests
+
+# Data processing
+pandas
+numpy
+python-dateutil

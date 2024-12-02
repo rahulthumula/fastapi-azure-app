@@ -1,0 +1,30 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+venv/
+.env
+*.log
+
+# VS Code
+.vscode/
+
+# Azure
+.azure/
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Project specific
+README.md
+*.md
+tests/
+docs/
