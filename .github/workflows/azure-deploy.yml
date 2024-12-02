@@ -9,16 +9,11 @@ on:
 env:
   AZURE_WEBAPP_NAME: invoice
   PYTHON_VERSION: '3.11'
-  # Add App Service configuration settings
-  WEBSITES_CONTAINER_START_TIME_LIMIT: 1800
-  WEBSITE_SCM_IDLE_TIMEOUT_IN_MINUTES: 30
-  SCM_COMMAND_IDLE_TIMEOUT: 1800
-  WEBSITE_HTTPLOGGING_RETENTION_DAYS: 1
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 30  # Increase job timeout to 30 minutes
+    timeout-minutes: 30
 
     steps:
     - name: Checkout repository
@@ -36,33 +31,8 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    # Add configuration for longer timeouts
-    - name: Configure App Service settings
-      uses: azure/appservice-settings@v1
-      with:
-        app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        app-settings-json: |
-          [
-            {
-              "name": "WEBSITES_CONTAINER_START_TIME_LIMIT",
-              "value": "1800",
-              "slotSetting": false
-            },
-            {
-              "name": "WEBSITE_SCM_IDLE_TIMEOUT_IN_MINUTES",
-              "value": "30",
-              "slotSetting": false
-            },
-            {
-              "name": "SCM_COMMAND_IDLE_TIMEOUT",
-              "value": "1800",
-              "slotSetting": false
-            }
-          ]
-
     - name: Create startup command file
       run: |
-        # Add longer timeout settings to Gunicorn
         echo "gunicorn -k uvicorn.workers.UvicornWorker --timeout 1800 --graceful-timeout 1800 --keep-alive 1800 --bind=0.0.0.0:8000 main:app" > startup.txt
 
     - name: Generate deployment package
@@ -71,7 +41,7 @@ jobs:
 
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
-      timeout-minutes: 30  # Add timeout for deployment step
+      timeout-minutes: 30
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
